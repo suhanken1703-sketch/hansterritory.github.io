@@ -1,13 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Professional Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Beauty & Wellness Hub</title>
+    <style>
+        :root {
+            --soft-pink: #f9f4f2;
+            --sage-green: #8da08e;
+            --dark-text: #4a4a4a;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--soft-pink);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            padding: 50px 20px;
+            text-align: center;
+            background: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5)px;
+        }
+        .badge {
+            background: var(--sage-green);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--dark-text);
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        img { max-width: 100%; border-radius: 10px; }
+    </style>
 </head>
-<body style="background-color: #1a1a1a; color: white; font-family: sans-serif; text-align: center;">
-    <h1>Welcome to My Space</h1>
-    <p>I'm a digital editor and gaming enthusiast based in HCM City.</p>
-    <img src="https://via.placeholder.com/300" alt="Work in progress">
-    <br>
-    <a href="https://google.com" style="color: #00ff00;">Check out my Yu-Gi-Oh collectibles</a>
+<body>
+
+<header>
+    <h1>Pure & Natural</h1>
+    <p>Curated reviews for the modern, wellness-conscious woman.</p>
+</header>
+
+<div class="container">
+    <div class="product-card">
+        <span class="badge">Health</span>
+        <h2>Ginger & Lotus Seed Tea: A Nightly Ritual</h2>
+        <p>This natural remedy has completely transformed my sleep quality and digestion...</p>
+        <a href="YOUR_AFFILIATE_LINK_HERE" class="btn">Check Price on Shopee/Amazon</a>
+    </div>
+
+    <div class="product-card">
+        <span class="badge">Beauty</span>
+        <h2>Organic Rosehip Oil Review</h2>
+        <p>The perfect solution for natural skin hydration without the chemicals.</p>
+        <a href="YOUR_AFFILIATE_LINK_HERE" class="btn">View Product</a>
+    </div>
+</div>
+
 </body>
 </html>
