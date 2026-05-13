@@ -1,86 +1,1315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Natural Beauty & Wellness Hub</title>
-    <style>
-        :root {
-            --soft-pink: #f9f4f2;
-            --sage-green: #8da08e;
-            --dark-text: #4a4a4a;
-        }
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--soft-pink);
-            color: var(--dark-text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        header {
-            padding: 50px 20px;
-            text-align: center;
-            background: white;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-5)px;
-        }
-        .badge {
-            background: var(--sage-green);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-        .btn {
-            display: inline-block;
-            background: var(--dark-text);
-            color: white;
-            padding: 10px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-        img { max-width: 100%; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luminous Archive — Beauty, Unfiltered</title>
+  <link rel="preconnect" href__="https://fonts.googleapis.com" />
+  <link rel="preconnect" href__="https://fonts.gstatic.com" crossorigin />
+  <link href__="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:           hsl(36, 33%, 96%);
+      --fg:           hsl(156, 16%, 12%);
+      --card:         hsl(40, 25%, 97%);
+      --primary:      hsl(22, 46%, 55%);
+      --primary-fg:   hsl(36, 33%, 96%);
+      --muted:        hsl(100, 10%, 92%);
+      --muted-fg:     hsl(156, 10%, 40%);
+      --border:       hsl(110, 8%, 84%);
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --radius:       0.75rem;
+    }
+
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    img { display: block; max-width: 100%; }
+    a  { text-decoration: none; color: inherit; }
+
+    /* ── Utility ───────────────────────────────────────────── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    @media(min-width: 768px){ .container { padding: 0 3rem; } }
+
+    .sr-only { position:absolute; width:1px; height:1px; clip:rect(0,0,0,0); overflow:hidden; }
+
+    /* fade-up animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.delay-1 { transition-delay: 0.10s; }
+    .fade-up.delay-2 { transition-delay: 0.18s; }
+    .fade-up.delay-3 { transition-delay: 0.26s; }
+    .fade-up.delay-4 { transition-delay: 0.34s; }
+    .fade-up.delay-5 { transition-delay: 0.42s; }
+
+    /* ── Header ────────────────────────────────────────────── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 40;
+      background: hsla(36, 33%, 96%, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .site-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    @media(min-width:768px){ .site-header__inner { padding: 1rem 3rem; } }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .logo svg { color: var(--primary); transition: transform 0.3s; }
+    .logo:hover svg { transform: rotate(12deg); }
+
+    .header-nav { display: none; gap: 2rem; }
+    @media(min-width:768px){ .header-nav { display: flex; align-items: center; } }
+    .header-nav a {
+      font-size: 0.875rem;
+      color: var(--muted-fg);
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--fg); }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 85vh;
+      overflow: hidden;
+    }
+    @media(min-width:768px){ .hero { height: 90vh; } }
+
+    .hero__img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right,
+        hsla(156,16%,12%,0.62) 0%,
+        hsla(156,16%,12%,0.30) 50%,
+        transparent 100%);
+    }
+    .hero__content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 4rem;
+    }
+    @media(min-width:768px){
+      .hero__content { align-items: center; padding-bottom: 0; }
+    }
+    .hero__inner { width: 100%; }
+    .hero__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero__eyebrow svg { color: var(--primary); }
+    .hero__eyebrow span {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: hsla(36,33%,96%,0.55);
+    }
+    .hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 600;
+      color: hsl(36, 33%, 96%);
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    .hero__title em { color: var(--primary); font-style: italic; }
+    .hero__sub {
+      color: hsla(36,33%,96%,0.70);
+      font-size: 1rem;
+      max-width: 28rem;
+      margin-bottom: 2rem;
+      line-height: 1.65;
+    }
+    @media(min-width:768px){ .hero__sub { font-size: 1.1rem; } }
+
+    .hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── Buttons ───────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, opacity 0.2s, transform 0.15s;
+      font-family: var(--font-body);
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid hsla(36,33%,96%,0.35);
+      color: hsl(36, 33%, 96%);
+    }
+    .btn-outline:hover { background: hsla(36,33%,96%,0.10); }
+    .btn-outline-dark {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    /* ── Section header ────────────────────────────────────── */
+    .section-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      margin-bottom: 0.4rem;
+    }
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    /* ── Featured Scroll ───────────────────────────────────── */
+    .featured-section { padding: 5rem 0; }
+    .featured-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media(min-width:768px){ .featured-header { padding: 0 3rem; } }
+
+    .scroll-controls { display: none; gap: 0.5rem; }
+    @media(min-width:768px){ .scroll-controls { display: flex; } }
+    .scroll-btn {
+      width: 2.5rem; height: 2.5rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .scroll-btn:hover { background: var(--muted); border-color: var(--primary); }
+    .scroll-btn svg { color: var(--fg); }
+
+    .featured-track {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 1.5rem 1rem;
+      scrollbar-width: none;
+    }
+    .featured-track::-webkit-scrollbar { display: none; }
+    @media(min-width:768px){ .featured-track { padding: 0 3rem 1rem; } }
+
+    .featured-card {
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      width: 82vw;
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      height: 60vh;
+    }
+    @media(min-width:768px){ .featured-card { width: 45vw; height: 70vh; } }
+    @media(min-width:1024px){ .featured-card { width: 35vw; } }
+
+    .featured-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .featured-card:hover img { transform: scale(1.05); }
+    .featured-card__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        hsla(156,16%,12%,0.80) 0%,
+        hsla(156,16%,12%,0.20) 50%,
+        transparent 100%);
+    }
+    .featured-card__body {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+    }
+    .featured-card__brand {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: hsla(36,33%,96%,0.55);
+      margin-bottom: 0.3rem;
+    }
+    .featured-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      color: hsl(36, 33%, 96%);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .featured-card__desc {
+      font-size: 0.875rem;
+      color: hsla(36,33%,96%,0.68);
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .featured-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .star-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: hsl(36, 33%, 96%);
+    }
+    .star-rating svg { color: var(--primary); fill: var(--primary); }
+    .read-link {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--primary);
+      transition: gap 0.2s;
+    }
+    .featured-card:hover .read-link { gap: 0.6rem; }
+
+    /* ── Categories Grid ───────────────────────────────────── */
+    .categories-section { padding: 4rem 0; }
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    @media(min-width:768px){
+      .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+    }
+
+    .cat-card {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: block;
+    }
+    .cat-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .cat-card:hover img { transform: scale(1.1); }
+    .cat-card__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        hsla(156,16%,12%,0.70) 0%,
+        transparent 60%);
+    }
+    .cat-card__body {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.25rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .cat-card__label {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: hsl(36, 33%, 96%);
+      font-weight: 600;
+    }
+    .cat-card__count {
+      font-size: 0.72rem;
+      color: hsla(36,33%,96%,0.55);
+      margin-top: 0.15rem;
+    }
+    .cat-card__arrow {
+      color: hsla(36,33%,96%,0.55);
+      transition: color 0.2s;
+    }
+    .cat-card:hover .cat-card__arrow { color: var(--primary); }
+
+    /* ── Product Cards ─────────────────────────────────────── */
+    .latest-section { padding: 4rem 0; }
+    .latest-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+    .view-all {
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--primary);
+      transition: gap 0.2s;
+    }
+    @media(min-width:768px){ .view-all { display: flex; } }
+    .view-all:hover { gap: 0.5rem; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media(min-width:640px){
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(min-width:1024px){
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow 0.4s, border-color 0.4s;
+      cursor: pointer;
+      display: block;
+    }
+    .product-card:hover {
+      box-shadow: 0 8px 32px hsla(22, 46%, 55%, 0.13);
+      border-color: hsla(22, 46%, 55%, 0.22);
+    }
+    .product-card__img-wrap {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      position: relative;
+    }
+    .product-card__img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .product-card:hover .product-card__img-wrap img { transform: scale(1.05); }
+    .top-pick-badge {
+      position: absolute;
+      top: 0.75rem; left: 0.75rem;
+      background: var(--primary);
+      color: var(--primary-fg);
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+    }
+    .product-card__body { padding: 1.25rem; }
+    .product-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-fg);
+    }
+    .product-card__meta .dot { opacity: 0.4; }
+    .product-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+    .product-card:hover .product-card__name { color: var(--primary); }
+    .product-card__desc {
+      font-size: 0.82rem;
+      color: var(--muted-fg);
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+    .product-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-card__rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .product-card__rating svg { color: var(--primary); fill: var(--primary); }
+    .product-card__price {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--primary);
+    }
+    .product-card__cta {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin-top: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .product-card:hover .product-card__cta { opacity: 1; }
+
+    /* ── Floating Nav ──────────────────────────────────────── */
+    .floating-nav {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: none;
+    }
+    @media(min-width:768px){ .floating-nav { display: block; } }
+    .floating-nav__inner {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: hsla(156,16%,12%,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 9999px;
+      padding: 0.5rem 2rem;
+      box-shadow: 0 8px 32px hsla(156,16%,12%,0.25);
+    }
+    .floating-nav__logo {
+      display: flex;
+      align-items: center;
+      margin-right: 0.75rem;
+    }
+    .floating-nav__logo svg { color: var(--primary); }
+    .fnav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      color: hsla(36,33%,96%,0.65);
+      transition: background 0.2s, color 0.2s;
+    }
+    .fnav-item:hover { color: hsl(36,33%,96%); }
+    .fnav-item.active { background: var(--primary); color: var(--primary-fg); }
+
+    /* Mobile bottom bar */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 50;
+      background: hsla(156,16%,12%,0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      padding: 0.75rem 1rem;
+    }
+    @media(min-width:768px){ .mobile-nav { display: none; } }
+    .mnav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.72rem;
+      color: hsla(36,33%,96%,0.55);
+      transition: color 0.2s;
+    }
+    .mnav-item.active { color: var(--primary); }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      background: var(--card);
+      padding-bottom: 5rem;
+    }
+    @media(min-width:768px){ .site-footer { padding-bottom: 2rem; } }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 4rem 0 0;
+    }
+    @media(min-width:768px){
+      .footer-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .footer-logo svg { color: var(--primary); }
+    .footer-p { font-size: 0.875rem; color: var(--muted-fg); line-height: 1.7; max-width: 18rem; }
+    .footer-h4 {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted-fg);
+      margin-bottom: 1rem;
+    }
+    .footer-cats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+    .footer-cats a {
+      font-size: 0.875rem;
+      color: var(--muted-fg);
+      transition: color 0.2s;
+    }
+    .footer-cats a:hover { color: var(--primary); }
+    .footer-bottom {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted-fg);
+    }
+
+    /* ── SVG icon helper ───────────────────────────────────── */
+    svg { display: inline-block; vertical-align: middle; }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Pure & Natural</h1>
-    <p>Curated reviews for the modern, wellness-conscious woman.</p>
+<!-- ══ HEADER ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href__="#" class="logo">
+      <!-- Leaf icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8
+                 0 5.5-4.78 10-10 10Z"/>
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+      </svg>
+      Luminous Archive
+    </a>
+    <nav class="header-nav">
+      <a href__="#">Reviews</a>
+      <a href__="#">Categories</a>
+    </nav>
+  </div>
 </header>
 
-<div class="container">
-    <div class="product-card">
-        <span class="badge">Health</span>
-        <h2>Ginger & Lotus Seed Tea: A Nightly Ritual</h2>
-        <p>This natural remedy has completely transformed my sleep quality and digestion...</p>
-        <a href="YOUR_AFFILIATE_LINK_HERE" class="btn">Check Price on Shopee/Amazon</a>
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <img
+    class="hero__img"
+    src="https://media.base44.com/images/public/6a033565242c3c586af56adb/e554aa266_generated_791b9442.png"
+    alt="Natural beauty products editorial"
+  />
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="hero__inner container">
+      <div class="fade-up" id="hero-block">
+        <div class="hero__eyebrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8
+                     0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+          <span>The Luminous Archive</span>
+        </div>
+        <h1 class="hero__title">
+          Beauty,<br>
+          <em>Unfiltered</em>
+        </h1>
+        <p class="hero__sub">
+          Honest reviews of natural beauty and holistic wellness products. Transparent ingredients. Curated rituals.
+        </p>
+        <div class="hero__ctas">
+          <a href__="#latest" class="btn btn-primary">
+            Explore Reviews
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+          <a href__="#categories" class="btn btn-outline">Categories</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURED SCROLL ════════════════════════════════════════ -->
+<section class="featured-section">
+  <div class="featured-header">
+    <div class="fade-up">
+      <p class="section-eyebrow">Curated Selection</p>
+      <h2 class="section-title">Featured Reviews</h2>
+    </div>
+    <div class="scroll-controls">
+      <button class="scroll-btn" onclick="scrollTrack(-1)" aria-label="Scroll left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="scroll-btn" onclick="scrollTrack(1)" aria-label="Scroll right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="featured-track" id="featuredTrack">
+
+    <!-- Card 1 -->
+    <a href__="#" class="featured-card">
+      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png"
+           alt="Botanical Radiance Serum" />
+      <div class="featured-card__overlay"></div>
+      <div class="featured-card__body">
+        <p class="featured-card__brand">Verdant Apothecary</p>
+        <h3 class="featured-card__name">Botanical Radiance Serum</h3>
+        <p class="featured-card__desc">A luminous blend of rosehip, jojoba, and sea buckthorn oils that restores skin's natural glow.</p>
+        <div class="featured-card__meta">
+          <span class="star-rating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            9.2/10
+          </span>
+          <span class="read-link">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 2 -->
+    <a href__="#" class="featured-card">
+      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png"
+           alt="Herbal Scalp Revival" />
+      <div class="featured-card__overlay"></div>
+      <div class="featured-card__body">
+        <p class="featured-card__brand">Root & Remedy</p>
+        <h3 class="featured-card__name">Herbal Scalp Revival Treatment</h3>
+        <p class="featured-card__desc">Tea tree, peppermint, and nettle extract to soothe irritation and promote healthy growth.</p>
+        <div class="featured-card__meta">
+          <span class="star-rating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor" stroke="currentColor" stroke-width="1">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            8.7/10
+          </span>
+          <span class="read-link">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 3 -->
+    <a href__="#" class="featured-card">
+      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png"
+           alt="Wild Shea Body Butter" />
+      <div class="featured-card__overlay"></div>
+      <div class="featured-card__body">
+        <p class="featured-card__brand">Terra Botanica</p>
+        <h3 class="featured-card__name">Wild Shea Body Ceremony Butter</h3>
+        <p class="featured-card__desc">Ultra-rich body butter blending raw shea, cocoa butter, and marula oil for deep, lasting moisture.</p>
+        <div class="featured-card__meta">
+          <span class="star-rating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor" stroke="currentColor" stroke-width="1">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            8.8/10
+          </span>
+          <span class="read-link">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 4 -->
+    <a href__="#" class="featured-card">
+      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png"
+           alt="Sacred Grove Blend" />
+      <div class="featured-card__overlay"></div>
+      <div class="featured-card__body">
+        <p class="featured-card__brand">Aether & Root</p>
+        <h3 class="featured-card__name">Sacred Grove Essential Oil Blend</h3>
+        <p class="featured-card__desc">Grounding blend of cedarwood, frankincense, and vetiver for meditation and evening ritual.</p>
+        <div class="featured-card__meta">
+          <span class="star-rating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor" stroke="currentColor" stroke-width="1">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            9.1/10
+          </span>
+          <span class="read-link">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══ CATEGORIES ════════════════════════════════════════════ -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="fade-up">
+      <p class="section-eyebrow">Browse By</p>
+      <h2 class="section-title">Categories</h2>
+    </div>
+    <div class="categories-grid">
+
+      <a href__="#" class="cat-card fade-up delay-1">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/46bd1bc62_generated_d324163a.png" alt="Skincare" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Skincare</div>
+            <div class="cat-card__count">2 reviews</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href__="#" class="cat-card fade-up delay-2">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png" alt="Haircare" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Haircare</div>
+            <div class="cat-card__count">1 review</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href__="#" class="cat-card fade-up delay-3">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png" alt="Body Care" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Body Care</div>
+            <div class="cat-card__count">1 review</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href__="#" class="cat-card fade-up delay-4">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ff62ab2da_generated_93227520.png" alt="Supplements" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Supplements</div>
+            <div class="cat-card__count">1 review</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href__="#" class="cat-card fade-up delay-5">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png" alt="Aromatherapy" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Aromatherapy</div>
+            <div class="cat-card__count">1 review</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href__="#" class="cat-card fade-up delay-1">
+        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png" alt="Wellness" />
+        <div class="cat-card__overlay"></div>
+        <div class="cat-card__body">
+          <div>
+            <div class="cat-card__label">Wellness</div>
+            <div class="cat-card__count">0 reviews</div>
+          </div>
+          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ LATEST REVIEWS ═════════════════════════════════════════ -->
+<section class="latest-section" id="latest">
+  <div class="container">
+    <div class="latest-header">
+      <div class="fade-up">
+        <p class="section-eyebrow">Recently Published</p>
+        <h2 class="section-title">Latest Reviews</h2>
+      </div>
+      <a href__="#" class="view-all">
+        View All
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
     </div>
 
-    <div class="product-card">
-        <span class="badge">Beauty</span>
-        <h2>Organic Rosehip Oil Review</h2>
-        <p>The perfect solution for natural skin hydration without the chemicals.</p>
-        <a href="YOUR_AFFILIATE_LINK_HERE" class="btn">View Product</a>
+    <div class="products-grid">
+
+      <!-- Product 1 -->
+      <a href__="#" class="product-card fade-up delay-1">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png"
+               alt="Botanical Radiance Serum" />
+          <span class="top-pick-badge">Top Pick</span>
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Verdant Apothecary</span>
+            <span class="dot">·</span>
+            <span>Skincare</span>
+          </div>
+          <h3 class="product-card__name">Botanical Radiance Serum</h3>
+          <p class="product-card__desc">A luminous blend of rosehip, jojoba, and sea buckthorn oils that restores skin's natural glow without heaviness.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              9.2/10
+            </span>
+            <span class="product-card__price">$48</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Product 2 -->
+      <a href__="#" class="product-card fade-up delay-2">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png"
+               alt="Herbal Scalp Revival Treatment" />
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Root & Remedy</span>
+            <span class="dot">·</span>
+            <span>Haircare</span>
+          </div>
+          <h3 class="product-card__name">Herbal Scalp Revival Treatment</h3>
+          <p class="product-card__desc">A pre-wash scalp treatment with tea tree, peppermint, and nettle extract to soothe irritation and promote healthy growth.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              8.7/10
+            </span>
+            <span class="product-card__price">$36</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Product 3 -->
+      <a href__="#" class="product-card fade-up delay-3">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png"
+               alt="Wild Shea Body Ceremony Butter" />
+          <span class="top-pick-badge">Top Pick</span>
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Terra Botanica</span>
+            <span class="dot">·</span>
+            <span>Body Care</span>
+          </div>
+          <h3 class="product-card__name">Wild Shea Body Ceremony Butter</h3>
+          <p class="product-card__desc">An ultra-rich body butter blending raw shea, cocoa butter, and marula oil for deep, lasting moisture.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              8.8/10
+            </span>
+            <span class="product-card__price">$52</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Product 4 -->
+      <a href__="#" class="product-card fade-up delay-4">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ff62ab2da_generated_93227520.png"
+               alt="Adaptogen Balance Complex" />
+          <span class="top-pick-badge">Top Pick</span>
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Symbiome</span>
+            <span class="dot">·</span>
+            <span>Supplements</span>
+          </div>
+          <h3 class="product-card__name">Adaptogen Balance Complex</h3>
+          <p class="product-card__desc">A daily adaptogenic supplement combining ashwagandha, reishi, and rhodiola for hormonal balance and calm energy.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              9.0/10
+            </span>
+            <span class="product-card__price">$42</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Product 5 -->
+      <a href__="#" class="product-card fade-up delay-5">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png"
+               alt="Sacred Grove Essential Oil Blend" />
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Aether & Root</span>
+            <span class="dot">·</span>
+            <span>Aromatherapy</span>
+          </div>
+          <h3 class="product-card__name">Sacred Grove Essential Oil Blend</h3>
+          <p class="product-card__desc">A grounding aromatherapy blend of cedarwood, frankincense, and vetiver for meditation and evening ritual.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              9.1/10
+            </span>
+            <span class="product-card__price">$38</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Product 6 -->
+      <a href__="#" class="product-card fade-up delay-1">
+        <div class="product-card__img-wrap">
+          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/46bd1bc62_generated_d324163a.png"
+               alt="Midnight Repair Cream" />
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__meta">
+            <span>Luna Herbals</span>
+            <span class="dot">·</span>
+            <span>Skincare</span>
+          </div>
+          <h3 class="product-card__name">Midnight Repair Cream</h3>
+          <p class="product-card__desc">An overnight repair cream with bakuchiol, squalane, and blue tansy to restore and calm skin while you sleep.</p>
+          <div class="product-card__footer">
+            <span class="product-card__rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="currentColor" stroke="currentColor" stroke-width="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              8.9/10
+            </span>
+            <span class="product-card__price">$56</span>
+          </div>
+          <div class="product-card__cta">
+            Read Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
     </div>
-</div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+          Luminous Archive
+        </div>
+        <p class="footer-p">Honest reviews of natural beauty and wellness products. Every recommendation is thoroughly tested and transparently reviewed.</p>
+      </div>
+      <div>
+        <h4 class="footer-h4">Categories</h4>
+        <div class="footer-cats">
+          <a href__="#">Skincare</a>
+          <a href__="#">Haircare</a>
+          <a href__="#">Body Care</a>
+          <a href__="#">Supplements</a>
+          <a href__="#">Aromatherapy</a>
+          <a href__="#">Wellness</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-h4">About</h4>
+        <p class="footer-p">We may earn a small commission from affiliate links at no extra cost to you. Our reviews are always independent and unbiased.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; <span id="year"></span> Luminous Archive. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- ══ FLOATING NAV ══════════════════════════════════════════ -->
+<nav class="floating-nav" id="floatingNav">
+  <div class="floating-nav__inner">
+    <a href__="#" class="floating-nav__logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+      </svg>
+    </a>
+    <a href__="#" class="fnav-item active">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      Home
+    </a>
+    <a href__="#latest" class="fnav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      Reviews
+    </a>
+    <a href__="#categories" class="fnav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2">
+        <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
+        <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+      </svg>
+      Categories
+    </a>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<nav class="mobile-nav">
+  <a href__="#" class="mnav-item active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    Home
+  </a>
+  <a href__="#latest" class="mnav-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    Reviews
+  </a>
+  <a href__="#categories" class="mnav-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2">
+      <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
+      <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+    </svg>
+    Categories
+  </a>
+</nav>
+
+<!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Floating nav scroll appearance
+  const floatingNav = document.getElementById('floatingNav');
+  window.addEventListener('scroll', () => {
+    floatingNav.style.opacity = window.scrollY > 80 ? '1' : '0';
+    floatingNav.style.transform = window.scrollY > 80
+      ? 'translateX(-50%) translateY(0)'
+      : 'translateX(-50%) translateY(16px)';
+  });
+  floatingNav.style.opacity = '0';
+  floatingNav.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+  floatingNav.style.transform = 'translateX(-50%) translateY(16px)';
+
+  // Featured scroll buttons
+  function scrollTrack(dir) {
+    const track = document.getElementById('featuredTrack');
+    track.scrollBy({ left: dir * track.offsetWidth * 0.6, behavior: 'smooth' });
+  }
+
+  // Hero fade-in
+  setTimeout(() => {
+    document.getElementById('hero-block').classList.add('visible');
+  }, 200);
+
+  // Intersection Observer for fade-up elements
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up:not(#hero-block)').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
