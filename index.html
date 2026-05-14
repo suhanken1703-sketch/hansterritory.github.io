@@ -1,1315 +1,1371 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luminous Archive — Beauty, Unfiltered</title>
-  <link rel="preconnect" href__="https://fonts.googleapis.com" />
-  <link rel="preconnect" href__="https://fonts.gstatic.com" crossorigin />
-  <link href__="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
+  <title>The Luminous Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ── Design Tokens ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:           hsl(36, 33%, 96%);
-      --fg:           hsl(156, 16%, 12%);
-      --card:         hsl(40, 25%, 97%);
-      --primary:      hsl(22, 46%, 55%);
-      --primary-fg:   hsl(36, 33%, 96%);
-      --muted:        hsl(100, 10%, 92%);
-      --muted-fg:     hsl(156, 10%, 40%);
-      --border:       hsl(110, 8%, 84%);
-      --font-heading: 'Playfair Display', Georgia, serif;
-      --font-body:    'Inter', system-ui, sans-serif;
-      --radius:       0.75rem;
+      --bg: hsl(36, 33%, 96%);
+      --fg: hsl(156, 16%, 12%);
+      --card: hsl(40, 25%, 97%);
+      --primary: hsl(22, 46%, 55%);
+      --primary-fg: hsl(36, 33%, 96%);
+      --muted: hsl(100, 10%, 92%);
+      --muted-fg: hsl(156, 10%, 40%);
+      --border: hsl(110, 8%, 84%);
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+      --radius: 0.75rem;
     }
 
-    /* ── Reset & Base ──────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
       color: var(--fg);
       font-family: var(--font-body);
       font-size: 1.05rem;
-      line-height: 1.65;
+      line-height: 1.6;
     }
-    img { display: block; max-width: 100%; }
-    a  { text-decoration: none; color: inherit; }
 
-    /* ── Utility ───────────────────────────────────────────── */
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
-    @media(min-width: 768px){ .container { padding: 0 3rem; } }
-
-    .sr-only { position:absolute; width:1px; height:1px; clip:rect(0,0,0,0); overflow:hidden; }
-
-    /* fade-up animation */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-    .fade-up.delay-1 { transition-delay: 0.10s; }
-    .fade-up.delay-2 { transition-delay: 0.18s; }
-    .fade-up.delay-3 { transition-delay: 0.26s; }
-    .fade-up.delay-4 { transition-delay: 0.34s; }
-    .fade-up.delay-5 { transition-delay: 0.42s; }
-
-    /* ── Header ────────────────────────────────────────────── */
-    .site-header {
+    /* ---------- HEADER ---------- */
+    header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 40;
-      background: hsla(36, 33%, 96%, 0.82);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      z-index: 100;
+      background: hsla(36, 33%, 96%, 0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-    }
-    .site-header__inner {
+      padding: 0 2rem;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.5rem;
-      max-width: 1280px;
-      margin: 0 auto;
     }
-    @media(min-width:768px){ .site-header__inner { padding: 1rem 3rem; } }
-
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
       font-family: var(--font-heading);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-    .logo svg { color: var(--primary); transition: transform 0.3s; }
-    .logo:hover svg { transform: rotate(12deg); }
-
-    .header-nav { display: none; gap: 2rem; }
-    @media(min-width:768px){ .header-nav { display: flex; align-items: center; } }
-    .header-nav a {
-      font-size: 0.875rem;
-      color: var(--muted-fg);
-      transition: color 0.2s;
-    }
-    .header-nav a:hover { color: var(--fg); }
-
-    /* ── Hero ──────────────────────────────────────────────── */
-    .hero {
-      position: relative;
-      height: 85vh;
-      overflow: hidden;
-    }
-    @media(min-width:768px){ .hero { height: 90vh; } }
-
-    .hero__img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .hero__overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right,
-        hsla(156,16%,12%,0.62) 0%,
-        hsla(156,16%,12%,0.30) 50%,
-        transparent 100%);
-    }
-    .hero__content {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: flex-end;
-      padding-bottom: 4rem;
-    }
-    @media(min-width:768px){
-      .hero__content { align-items: center; padding-bottom: 0; }
-    }
-    .hero__inner { width: 100%; }
-    .hero__eyebrow {
+      color: var(--fg);
+      text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
     }
-    .hero__eyebrow svg { color: var(--primary); }
-    .hero__eyebrow span {
+    .logo svg { color: var(--primary); }
+    nav a {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--muted-fg);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--fg); }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      position: relative;
+      height: 90vh;
+      overflow: hidden;
+      margin-top: 60px;
+    }
+    .hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, hsla(156,16%,12%,0.60), hsla(156,16%,12%,0.30), transparent);
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end;
+      padding: 4rem 2rem;
+    }
+    @media (min-width: 768px) {
+      .hero-content { align-items: center; padding: 0 3rem; }
+    }
+    .hero-inner { max-width: 520px; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.5rem;
       font-size: 0.7rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: hsla(36,33%,96%,0.55);
+      color: hsla(36,33%,96%,0.6);
+      margin-bottom: 1rem;
     }
-    .hero__title {
+    .hero-eyebrow svg { color: var(--primary); }
+    .hero h1 {
       font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: hsl(36,33%,96%);
       font-weight: 600;
-      color: hsl(36, 33%, 96%);
       line-height: 1.05;
       margin-bottom: 1rem;
     }
-    .hero__title em { color: var(--primary); font-style: italic; }
-    .hero__sub {
-      color: hsla(36,33%,96%,0.70);
+    .hero h1 em { color: var(--primary); font-style: italic; }
+    .hero p {
+      color: hsla(36,33%,96%,0.7);
       font-size: 1rem;
-      max-width: 28rem;
+      max-width: 400px;
       margin-bottom: 2rem;
-      line-height: 1.65;
+      line-height: 1.7;
     }
-    @media(min-width:768px){ .hero__sub { font-size: 1.1rem; } }
+    .hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
-    .hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-    /* ── Buttons ───────────────────────────────────────────── */
+    /* ---------- BUTTONS ---------- */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1.5rem;
-      border-radius: 9999px;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
       font-size: 0.875rem;
+      font-family: var(--font-body);
       font-weight: 500;
       cursor: pointer;
       border: none;
-      transition: background 0.2s, opacity 0.2s, transform 0.15s;
-      font-family: var(--font-body);
+      transition: opacity 0.2s, background 0.2s;
+      text-decoration: none;
     }
-    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
     .btn-primary { background: var(--primary); color: var(--primary-fg); }
+    .btn-primary:hover { opacity: 0.88; }
     .btn-outline {
       background: transparent;
       border: 1px solid hsla(36,33%,96%,0.35);
-      color: hsl(36, 33%, 96%);
+      color: hsl(36,33%,96%);
     }
-    .btn-outline:hover { background: hsla(36,33%,96%,0.10); }
+    .btn-outline:hover { background: hsla(36,33%,96%,0.1); }
     .btn-outline-dark {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--fg);
     }
+    .btn-outline-dark:hover { background: var(--muted); }
+    .btn-sm { padding: 0.35rem 0.9rem; font-size: 0.78rem; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ── Section header ────────────────────────────────────── */
+    /* ---------- SECTION ---------- */
+    section { padding: 4rem 1.5rem; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-eyebrow {
       font-size: 0.7rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--muted-fg);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
     .section-title {
       font-family: var(--font-heading);
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
       font-weight: 600;
-      line-height: 1.15;
+      margin-bottom: 2.5rem;
     }
-
-    /* ── Featured Scroll ───────────────────────────────────── */
-    .featured-section { padding: 5rem 0; }
-    .featured-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      margin-bottom: 2rem;
-    }
-    @media(min-width:768px){ .featured-header { padding: 0 3rem; } }
-
-    .scroll-controls { display: none; gap: 0.5rem; }
-    @media(min-width:768px){ .scroll-controls { display: flex; } }
-    .scroll-btn {
-      width: 2.5rem; height: 2.5rem;
-      border-radius: 9999px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .scroll-btn:hover { background: var(--muted); border-color: var(--primary); }
-    .scroll-btn svg { color: var(--fg); }
-
-    .featured-track {
-      display: flex;
-      gap: 1.5rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 0 1.5rem 1rem;
-      scrollbar-width: none;
-    }
-    .featured-track::-webkit-scrollbar { display: none; }
-    @media(min-width:768px){ .featured-track { padding: 0 3rem 1rem; } }
-
-    .featured-card {
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      width: 82vw;
-      position: relative;
-      border-radius: 1rem;
-      overflow: hidden;
-      height: 60vh;
-    }
-    @media(min-width:768px){ .featured-card { width: 45vw; height: 70vh; } }
-    @media(min-width:1024px){ .featured-card { width: 35vw; } }
-
-    .featured-card img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s ease;
-    }
-    .featured-card:hover img { transform: scale(1.05); }
-    .featured-card__overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top,
-        hsla(156,16%,12%,0.80) 0%,
-        hsla(156,16%,12%,0.20) 50%,
-        transparent 100%);
-    }
-    .featured-card__body {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 2rem;
-    }
-    .featured-card__brand {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: hsla(36,33%,96%,0.55);
-      margin-bottom: 0.3rem;
-    }
-    .featured-card__name {
-      font-family: var(--font-heading);
-      font-size: 1.6rem;
-      color: hsl(36, 33%, 96%);
-      font-weight: 600;
-      line-height: 1.15;
-      margin-bottom: 0.5rem;
-    }
-    .featured-card__desc {
-      font-size: 0.875rem;
-      color: hsla(36,33%,96%,0.68);
-      margin-bottom: 1rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .featured-card__meta {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-    }
-    .star-rating {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: hsl(36, 33%, 96%);
-    }
-    .star-rating svg { color: var(--primary); fill: var(--primary); }
-    .read-link {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--primary);
-      transition: gap 0.2s;
-    }
-    .featured-card:hover .read-link { gap: 0.6rem; }
-
-    /* ── Categories Grid ───────────────────────────────────── */
-    .categories-section { padding: 4rem 0; }
-    .categories-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-top: 2.5rem;
-    }
-    @media(min-width:768px){
-      .categories-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-      }
-    }
-
-    .cat-card {
-      position: relative;
-      border-radius: 1rem;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: var(--card);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      display: block;
-    }
-    .cat-card img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s ease;
-    }
-    .cat-card:hover img { transform: scale(1.1); }
-    .cat-card__overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top,
-        hsla(156,16%,12%,0.70) 0%,
-        transparent 60%);
-    }
-    .cat-card__body {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 1.25rem;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-    }
-    .cat-card__label {
-      font-family: var(--font-heading);
-      font-size: 1.2rem;
-      color: hsl(36, 33%, 96%);
-      font-weight: 600;
-    }
-    .cat-card__count {
-      font-size: 0.72rem;
-      color: hsla(36,33%,96%,0.55);
-      margin-top: 0.15rem;
-    }
-    .cat-card__arrow {
-      color: hsla(36,33%,96%,0.55);
-      transition: color 0.2s;
-    }
-    .cat-card:hover .cat-card__arrow { color: var(--primary); }
-
-    /* ── Product Cards ─────────────────────────────────────── */
-    .latest-section { padding: 4rem 0; }
-    .latest-header {
+    .section-head {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       margin-bottom: 2.5rem;
     }
+    .section-head .section-title { margin-bottom: 0; }
     .view-all {
-      display: none;
-      align-items: center;
-      gap: 0.25rem;
-      font-size: 0.875rem;
-      font-weight: 500;
+      display: flex; align-items: center; gap: 0.3rem;
+      font-size: 0.85rem;
       color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
       transition: gap 0.2s;
     }
-    @media(min-width:768px){ .view-all { display: flex; } }
     .view-all:hover { gap: 0.5rem; }
 
-    .products-grid {
+    /* ---------- CATEGORY GRID ---------- */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .cat-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .cat-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .cat-card:hover img { transform: scale(1.05); }
+    .cat-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, hsla(156,16%,12%,0.7) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.25rem;
+    }
+    .cat-card-label {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: hsl(36,33%,96%);
+    }
+    .cat-card-count {
+      font-size: 0.75rem;
+      color: hsla(36,33%,96%,0.65);
+    }
+
+    /* ---------- PRODUCT GRID ---------- */
+    .product-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
-    @media(min-width:640px){
-      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 640px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    @media(min-width:1024px){
-      .products-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (min-width: 1024px) {
+      .product-grid { grid-template-columns: repeat(3, 1fr); }
     }
-
     .product-card {
-      background: var(--card);
-      border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      transition: box-shadow 0.4s, border-color 0.4s;
-      cursor: pointer;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.3s, border-color 0.3s;
       display: block;
+      text-decoration: none;
+      color: var(--fg);
+      cursor: pointer;
     }
     .product-card:hover {
-      box-shadow: 0 8px 32px hsla(22, 46%, 55%, 0.13);
-      border-color: hsla(22, 46%, 55%, 0.22);
+      box-shadow: 0 8px 32px hsla(22,46%,55%,0.12);
+      border-color: hsla(22,46%,55%,0.25);
     }
-    .product-card__img-wrap {
+    .product-card-img {
       aspect-ratio: 4/5;
       overflow: hidden;
+      background: var(--muted);
       position: relative;
     }
-    .product-card__img-wrap img {
+    .product-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .product-card:hover .product-card-img img { transform: scale(1.05); }
+    .product-card-img-empty {
       width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s ease;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted-fg); font-size: 0.85rem;
     }
-    .product-card:hover .product-card__img-wrap img { transform: scale(1.05); }
     .top-pick-badge {
-      position: absolute;
-      top: 0.75rem; left: 0.75rem;
+      position: absolute; top: 0.75rem; left: 0.75rem;
       background: var(--primary);
       color: var(--primary-fg);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
       font-weight: 500;
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
     }
-    .product-card__body { padding: 1.25rem; }
-    .product-card__meta {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+    .product-card-body { padding: 1.2rem; }
+    .product-card-meta {
+      display: flex; align-items: center; gap: 0.5rem;
       font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
       color: var(--muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
     }
-    .product-card__meta .dot { opacity: 0.4; }
-    .product-card__name {
+    .product-card-meta-dot { color: hsla(156,16%,12%,0.25); }
+    .product-card-title {
       font-family: var(--font-heading);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       line-height: 1.3;
       margin-bottom: 0.5rem;
       transition: color 0.2s;
     }
-    .product-card:hover .product-card__name { color: var(--primary); }
-    .product-card__desc {
+    .product-card:hover .product-card-title { color: var(--primary); }
+    .product-card-desc {
       font-size: 0.82rem;
       color: var(--muted-fg);
-      margin-bottom: 0.75rem;
+      line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      line-height: 1.5;
+      margin-bottom: 0.75rem;
     }
-    .product-card__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .product-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .product-card__rating {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.875rem;
-      font-weight: 500;
+    .product-card-rating {
+      display: flex; align-items: center; gap: 0.3rem;
+      font-size: 0.85rem; font-weight: 500;
     }
-    .product-card__rating svg { color: var(--primary); fill: var(--primary); }
-    .product-card__price {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--primary);
-    }
-    .product-card__cta {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--primary);
+    .star-icon { color: var(--primary); width: 14px; height: 14px; }
+    .product-card-price { font-size: 0.85rem; font-weight: 500; color: var(--primary); }
+    .product-card-cta {
       margin-top: 1rem;
+      display: flex; align-items: center; gap: 0.25rem;
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--primary);
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.2s;
     }
-    .product-card:hover .product-card__cta { opacity: 1; }
+    .product-card:hover .product-card-cta { opacity: 1; }
 
-    /* ── Floating Nav ──────────────────────────────────────── */
-    .floating-nav {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 50;
-      display: none;
+    /* ---------- FEATURED SCROLL ---------- */
+    .featured-wrap { position: relative; overflow: hidden; }
+    .featured-scroll {
+      display: flex; gap: 1.5rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 0 2rem 1rem;
+      scrollbar-width: none;
     }
-    @media(min-width:768px){ .floating-nav { display: block; } }
-    .floating-nav__inner {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      background: hsla(156,16%,12%,0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 9999px;
-      padding: 0.5rem 2rem;
-      box-shadow: 0 8px 32px hsla(156,16%,12%,0.25);
+    .featured-scroll::-webkit-scrollbar { display: none; }
+    .featured-item {
+      flex: 0 0 300px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 3/4;
+      cursor: pointer;
     }
-    .floating-nav__logo {
-      display: flex;
-      align-items: center;
-      margin-right: 0.75rem;
+    .featured-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .featured-item:hover img { transform: scale(1.04); }
+    .featured-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, hsla(156,16%,12%,0.75) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.25rem;
     }
-    .floating-nav__logo svg { color: var(--primary); }
-    .fnav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 1rem;
-      border-radius: 9999px;
-      font-size: 0.82rem;
+    .featured-item-brand {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
       color: hsla(36,33%,96%,0.65);
-      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.3rem;
     }
-    .fnav-item:hover { color: hsl(36,33%,96%); }
-    .fnav-item.active { background: var(--primary); color: var(--primary-fg); }
-
-    /* Mobile bottom bar */
-    .mobile-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 50;
-      background: hsla(156,16%,12%,0.96);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      padding: 0.75rem 1rem;
-    }
-    @media(min-width:768px){ .mobile-nav { display: none; } }
-    .mnav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-      font-size: 0.72rem;
-      color: hsla(36,33%,96%,0.55);
-      transition: color 0.2s;
-    }
-    .mnav-item.active { color: var(--primary); }
-
-    /* ── Footer ────────────────────────────────────────────── */
-    .site-footer {
-      border-top: 1px solid var(--border);
-      background: var(--card);
-      padding-bottom: 5rem;
-    }
-    @media(min-width:768px){ .site-footer { padding-bottom: 2rem; } }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      padding: 4rem 0 0;
-    }
-    @media(min-width:768px){
-      .footer-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
+    .featured-item-name {
       font-family: var(--font-heading);
       font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      color: hsl(36,33%,96%);
+      margin-bottom: 0.5rem;
     }
-    .footer-logo svg { color: var(--primary); }
-    .footer-p { font-size: 0.875rem; color: var(--muted-fg); line-height: 1.7; max-width: 18rem; }
-    .footer-h4 {
-      font-family: var(--font-heading);
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--muted-fg);
-      margin-bottom: 1rem;
+    .featured-item-rating {
+      display: flex; align-items: center; gap: 0.3rem;
+      font-size: 0.82rem;
+      color: hsla(36,33%,96%,0.85);
     }
-    .footer-cats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
+    .scroll-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      z-index: 10;
+      background: hsla(36,33%,96%,0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      width: 2.5rem; height: 2.5rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-    .footer-cats a {
-      font-size: 0.875rem;
-      color: var(--muted-fg);
+    .scroll-btn:hover { background: var(--card); }
+    .scroll-btn-left { left: 0.5rem; }
+    .scroll-btn-right { right: 0.5rem; }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      margin-top: 4rem;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    .footer-brand { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .footer-tagline { font-size: 0.82rem; color: var(--muted-fg); line-height: 1.6; max-width: 300px; }
+    .footer-disclaimer { font-size: 0.72rem; color: var(--muted-fg); margin-top: 0.75rem; line-height: 1.5; max-width: 300px; }
+    .footer-nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted-fg); margin-bottom: 0.75rem; }
+    .footer-nav a {
+      display: block; font-size: 0.85rem; color: var(--fg);
+      text-decoration: none; margin-bottom: 0.4rem;
       transition: color 0.2s;
     }
-    .footer-cats a:hover { color: var(--primary); }
+    .footer-nav a:hover { color: var(--primary); }
     .footer-bottom {
-      margin-top: 4rem;
-      padding-top: 2rem;
+      max-width: 1200px; margin: 2rem auto 0;
       border-top: 1px solid var(--border);
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--muted-fg);
+      padding-top: 1.5rem;
+      font-size: 0.72rem; color: var(--muted-fg);
     }
 
-    /* ── SVG icon helper ───────────────────────────────────── */
-    svg { display: inline-block; vertical-align: middle; }
+    /* ---------- COMPOSER ---------- */
+    .composer-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: hsla(156,16%,12%,0.5);
+      z-index: 200;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 80px 1rem 2rem;
+      overflow-y: auto;
+    }
+    .composer-backdrop.open { display: flex; }
+    .composer {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 20px 60px hsla(156,16%,12%,0.25);
+      overflow: hidden;
+    }
+    .composer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .composer-header-left { display: flex; align-items: center; gap: 0.5rem; }
+    .composer-header-left svg { color: var(--primary); }
+    .composer-header-title { font-family: var(--font-heading); font-weight: 600; }
+    .composer-close {
+      background: none; border: none;
+      cursor: pointer; padding: 0.25rem;
+      border-radius: 999px;
+      color: var(--muted-fg);
+      transition: background 0.15s;
+    }
+    .composer-close:hover { background: var(--muted); }
+    .composer-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .upload-zone:hover { border-color: hsla(22,46%,55%,0.5); }
+    .upload-zone-placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2.5rem; gap: 0.5rem;
+      color: var(--muted-fg);
+    }
+    .upload-zone-placeholder svg { width: 2rem; height: 2rem; }
+    .upload-zone-placeholder span { font-size: 0.85rem; }
+    .upload-zone-preview { position: relative; }
+    .upload-zone-preview img { width: 100%; max-height: 260px; object-fit: cover; display: block; }
+    .upload-remove {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: hsla(156,16%,12%,0.7);
+      border: none; border-radius: 999px;
+      padding: 0.25rem; cursor: pointer; color: hsl(36,33%,96%);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+
+    input[type=text], input[type=number], input[type=url], textarea, select {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--fg);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.55rem 0.85rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      line-height: 1.5;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px hsla(22,46%,55%,0.15);
+    }
+    textarea { resize: vertical; }
+    input[type=file] { display: none; }
+
+    .input-icon-wrap { position: relative; }
+    .input-icon-wrap svg {
+      position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%);
+      width: 14px; height: 14px; color: var(--muted-fg); pointer-events: none;
+    }
+    .input-icon-wrap input { padding-left: 2rem; }
+
+    .cat-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cat-pill {
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-family: var(--font-body);
+      cursor: pointer;
+      border: none;
+      background: var(--muted);
+      color: var(--muted-fg);
+      transition: background 0.15s, color 0.15s;
+    }
+    .cat-pill.active { background: var(--fg); color: var(--bg); }
+
+    .tag-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.72rem;
+    }
+    .tag-badge-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted-fg); padding: 0; line-height: 1;
+      display: flex; align-items: center;
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
+
+    .field-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted-fg);
+      margin-bottom: 0.4rem;
+    }
+
+    .advanced-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.85rem; color: var(--muted-fg);
+      background: none; border: none; cursor: pointer;
+      transition: color 0.2s; padding: 0;
+    }
+    .advanced-toggle:hover { color: var(--fg); }
+
+    .advanced-section { display: none; }
+    .advanced-section.open { display: flex; flex-direction: column; gap: 1rem; }
+
+    .checkbox-row { display: flex; gap: 1.5rem; }
+    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem; }
+    .custom-checkbox {
+      width: 1.1rem; height: 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .custom-checkbox.checked { background: var(--primary); border-color: var(--primary); }
+    .custom-checkbox svg { display: none; }
+    .custom-checkbox.checked svg { display: block; }
+
+    .composer-footer {
+      display: flex; gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .composer-footer .btn { flex: 1; justify-content: center; }
+
+    .spinner {
+      width: 1rem; height: 1rem;
+      border: 2px solid hsla(36,33%,96%,0.4);
+      border-top-color: var(--primary-fg);
+      border-radius: 999px;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- TOAST ---------- */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--fg); color: var(--bg);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ---------- EMPTY STATE ---------- */
+    .empty-state {
+      text-align: center; padding: 5rem 1rem;
+    }
+    .empty-state svg { color: var(--primary); opacity: 0.4; width: 3rem; height: 3rem; margin: 0 auto 1rem; display: block; }
+    .empty-state h2 { font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .empty-state p { color: var(--muted-fg); }
+
+    /* ---------- FLOATING NAV (mobile) ---------- */
+    .floating-nav {
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      background: hsla(36,33%,96%,0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      display: flex; align-items: center; gap: 0.25rem;
+      padding: 0.4rem 0.75rem;
+      z-index: 90;
+      box-shadow: 0 4px 20px hsla(156,16%,12%,0.12);
+    }
+    .nav-link {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.15rem; padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted-fg);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer; border: none; background: none;
+    }
+    .nav-link:hover, .nav-link.active { background: var(--muted); color: var(--fg); }
+    .nav-link svg { width: 1.1rem; height: 1.1rem; }
+
+    /* page views */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* reviews page header */
+    .reviews-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .search-wrap { position: relative; max-width: 400px; margin-bottom: 1.5rem; }
+    .search-wrap svg { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted-fg); pointer-events: none; }
+    .search-wrap input { padding-left: 2.25rem; border-radius: 999px; background: var(--card); }
+    .filter-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .filter-pill {
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer; border: 1px solid var(--border);
+      background: var(--card); color: var(--muted-fg);
+      transition: all 0.2s; font-family: var(--font-body);
+    }
+    .filter-pill.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
   </style>
 </head>
 <body>
 
-<!-- ══ HEADER ════════════════════════════════════════════════ -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a href__="#" class="logo">
-      <!-- Leaf icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8
-                 0 5.5-4.78 10-10 10Z"/>
-        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-      </svg>
-      Luminous Archive
-    </a>
-    <nav class="header-nav">
-      <a href__="#">Reviews</a>
-      <a href__="#">Categories</a>
-    </nav>
-  </div>
+<!-- HEADER -->
+<header>
+  <a class="logo" onclick="showPage('home')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+    The Luminous Archive
+  </a>
+  <nav>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('reviews')">Reviews</a>
+    <a onclick="showPage('categories')">Categories</a>
+  </nav>
 </header>
 
-<!-- ══ HERO ══════════════════════════════════════════════════ -->
-<section class="hero">
-  <img
-    class="hero__img"
-    src="https://media.base44.com/images/public/6a033565242c3c586af56adb/e554aa266_generated_791b9442.png"
-    alt="Natural beauty products editorial"
-  />
-  <div class="hero__overlay"></div>
-  <div class="hero__content">
-    <div class="hero__inner container">
-      <div class="fade-up" id="hero-block">
-        <div class="hero__eyebrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8
-                     0 5.5-4.78 10-10 10Z"/>
-            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-          </svg>
-          <span>The Luminous Archive</span>
+<!-- ============ HOME PAGE ============ -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <section class="hero" style="margin-top:60px; padding:0;">
+    <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/e554aa266_generated_791b9442.png" alt="Natural beauty editorial" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          The Luminous Archive
         </div>
-        <h1 class="hero__title">
-          Beauty,<br>
-          <em>Unfiltered</em>
-        </h1>
-        <p class="hero__sub">
-          Honest reviews of natural beauty and holistic wellness products. Transparent ingredients. Curated rituals.
-        </p>
-        <div class="hero__ctas">
-          <a href__="#latest" class="btn btn-primary">
+        <h1>Beauty,<br><em>Unfiltered</em></h1>
+        <p>Honest reviews of natural beauty and holistic wellness products. Transparent ingredients. Curated rituals.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showPage('reviews')">
             Explore Reviews
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </a>
-          <a href__="#categories" class="btn btn-outline">Categories</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <button class="btn btn-outline" onclick="showPage('categories')">Categories</button>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══ FEATURED SCROLL ════════════════════════════════════════ -->
-<section class="featured-section">
-  <div class="featured-header">
-    <div class="fade-up">
-      <p class="section-eyebrow">Curated Selection</p>
-      <h2 class="section-title">Featured Reviews</h2>
+  <!-- Featured Scroll -->
+  <section id="featured-section" style="padding: 4rem 0;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 1.5rem 1rem;">
+      <p class="section-eyebrow">Featured</p>
+      <h2 class="section-title">Editor's Picks</h2>
     </div>
-    <div class="scroll-controls">
-      <button class="scroll-btn" onclick="scrollTrack(-1)" aria-label="Scroll left">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
+    <div class="featured-wrap">
+      <button class="scroll-btn scroll-btn-left" onclick="scrollFeatured(-1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
       </button>
-      <button class="scroll-btn" onclick="scrollTrack(1)" aria-label="Scroll right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m9 18 6-6-6-6"/>
-        </svg>
+      <div class="featured-scroll" id="featuredScroll"></div>
+      <button class="scroll-btn scroll-btn-right" onclick="scrollFeatured(1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
       </button>
     </div>
-  </div>
+  </section>
 
-  <div class="featured-track" id="featuredTrack">
-
-    <!-- Card 1 -->
-    <a href__="#" class="featured-card">
-      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png"
-           alt="Botanical Radiance Serum" />
-      <div class="featured-card__overlay"></div>
-      <div class="featured-card__body">
-        <p class="featured-card__brand">Verdant Apothecary</p>
-        <h3 class="featured-card__name">Botanical Radiance Serum</h3>
-        <p class="featured-card__desc">A luminous blend of rosehip, jojoba, and sea buckthorn oils that restores skin's natural glow.</p>
-        <div class="featured-card__meta">
-          <span class="star-rating">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-            9.2/10
-          </span>
-          <span class="read-link">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Card 2 -->
-    <a href__="#" class="featured-card">
-      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png"
-           alt="Herbal Scalp Revival" />
-      <div class="featured-card__overlay"></div>
-      <div class="featured-card__body">
-        <p class="featured-card__brand">Root & Remedy</p>
-        <h3 class="featured-card__name">Herbal Scalp Revival Treatment</h3>
-        <p class="featured-card__desc">Tea tree, peppermint, and nettle extract to soothe irritation and promote healthy growth.</p>
-        <div class="featured-card__meta">
-          <span class="star-rating">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="currentColor" stroke="currentColor" stroke-width="1">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-            8.7/10
-          </span>
-          <span class="read-link">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Card 3 -->
-    <a href__="#" class="featured-card">
-      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png"
-           alt="Wild Shea Body Butter" />
-      <div class="featured-card__overlay"></div>
-      <div class="featured-card__body">
-        <p class="featured-card__brand">Terra Botanica</p>
-        <h3 class="featured-card__name">Wild Shea Body Ceremony Butter</h3>
-        <p class="featured-card__desc">Ultra-rich body butter blending raw shea, cocoa butter, and marula oil for deep, lasting moisture.</p>
-        <div class="featured-card__meta">
-          <span class="star-rating">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="currentColor" stroke="currentColor" stroke-width="1">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-            8.8/10
-          </span>
-          <span class="read-link">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Card 4 -->
-    <a href__="#" class="featured-card">
-      <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png"
-           alt="Sacred Grove Blend" />
-      <div class="featured-card__overlay"></div>
-      <div class="featured-card__body">
-        <p class="featured-card__brand">Aether & Root</p>
-        <h3 class="featured-card__name">Sacred Grove Essential Oil Blend</h3>
-        <p class="featured-card__desc">Grounding blend of cedarwood, frankincense, and vetiver for meditation and evening ritual.</p>
-        <div class="featured-card__meta">
-          <span class="star-rating">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="currentColor" stroke="currentColor" stroke-width="1">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-            9.1/10
-          </span>
-          <span class="read-link">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-      </div>
-    </a>
-
-  </div>
-</section>
-
-<!-- ══ CATEGORIES ════════════════════════════════════════════ -->
-<section class="categories-section" id="categories">
-  <div class="container">
-    <div class="fade-up">
+  <!-- Categories -->
+  <section>
+    <div class="section-inner">
       <p class="section-eyebrow">Browse By</p>
       <h2 class="section-title">Categories</h2>
+      <div class="cat-grid" id="homeCatGrid"></div>
     </div>
-    <div class="categories-grid">
+  </section>
 
-      <a href__="#" class="cat-card fade-up delay-1">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/46bd1bc62_generated_d324163a.png" alt="Skincare" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Skincare</div>
-            <div class="cat-card__count">2 reviews</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
+  <!-- Latest Reviews -->
+  <section id="latest-section">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <p class="section-eyebrow">Recently Published</p>
+          <h2 class="section-title">Latest Reviews</h2>
         </div>
-      </a>
+        <a class="view-all" onclick="showPage('reviews')">
+          View All
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="product-grid" id="homeLatestGrid"></div>
+    </div>
+  </section>
 
-      <a href__="#" class="cat-card fade-up delay-2">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png" alt="Haircare" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Haircare</div>
-            <div class="cat-card__count">1 review</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
-        </div>
-      </a>
+  <div id="home-empty" class="empty-state" style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+    <h2>No reviews yet</h2>
+    <p>Products will appear here once they are added.</p>
+  </div>
+</div>
 
-      <a href__="#" class="cat-card fade-up delay-3">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png" alt="Body Care" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Body Care</div>
-            <div class="cat-card__count">1 review</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
-        </div>
-      </a>
+<!-- ============ REVIEWS PAGE ============ -->
+<div id="page-reviews" class="page">
+  <div class="section-inner" style="padding-top:5rem; padding-bottom:5rem;">
+    <div class="reviews-header">
+      <div>
+        <p class="section-eyebrow">Archive</p>
+        <h1 style="font-family:var(--font-heading);font-size:clamp(2rem,4vw,3rem);font-weight:600;">All Reviews</h1>
+      </div>
+      <button class="btn btn-primary" onclick="openComposer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span>New Review</span>
+      </button>
+    </div>
 
-      <a href__="#" class="cat-card fade-up delay-4">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ff62ab2da_generated_93227520.png" alt="Supplements" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Supplements</div>
-            <div class="cat-card__count">1 review</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
-        </div>
-      </a>
+    <div class="search-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search products or brands..." oninput="filterReviews()" />
+    </div>
 
-      <a href__="#" class="cat-card fade-up delay-5">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png" alt="Aromatherapy" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Aromatherapy</div>
-            <div class="cat-card__count">1 review</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
-        </div>
-      </a>
+    <div class="filter-pills" id="filterPills"></div>
 
-      <a href__="#" class="cat-card fade-up delay-1">
-        <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png" alt="Wellness" />
-        <div class="cat-card__overlay"></div>
-        <div class="cat-card__body">
-          <div>
-            <div class="cat-card__label">Wellness</div>
-            <div class="cat-card__count">0 reviews</div>
-          </div>
-          <svg class="cat-card__arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-          </svg>
-        </div>
-      </a>
-
+    <p id="reviewCount" style="font-size:0.85rem; color:var(--muted-fg); margin-bottom:1.5rem;"></p>
+    <div class="product-grid" id="reviewsGrid"></div>
+    <div id="reviews-empty" class="empty-state" style="display:none; padding:3rem 0;">
+      <p style="color:var(--muted-fg);">No reviews found matching your criteria.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══ LATEST REVIEWS ═════════════════════════════════════════ -->
-<section class="latest-section" id="latest">
-  <div class="container">
-    <div class="latest-header">
-      <div class="fade-up">
-        <p class="section-eyebrow">Recently Published</p>
-        <h2 class="section-title">Latest Reviews</h2>
-      </div>
-      <a href__="#" class="view-all">
-        View All
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
+<!-- ============ CATEGORIES PAGE ============ -->
+<div id="page-categories" class="page">
+  <div class="section-inner" style="padding-top:5rem; padding-bottom:5rem;">
+    <p class="section-eyebrow">Explore</p>
+    <h1 style="font-family:var(--font-heading);font-size:clamp(2rem,4vw,3rem);font-weight:600; margin-bottom:2.5rem;">Categories</h1>
+    <div class="cat-grid" id="catPageGrid"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">The Luminous Archive</div>
+      <p class="footer-tagline">Honest, independent reviews of natural beauty and wellness products for the discerning ritual-keeper.</p>
+      <p class="footer-disclaimer">Some links on this site are affiliate links. We may earn a small commission — at no extra cost to you — when you purchase through our links.</p>
     </div>
-
-    <div class="products-grid">
-
-      <!-- Product 1 -->
-      <a href__="#" class="product-card fade-up delay-1">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png"
-               alt="Botanical Radiance Serum" />
-          <span class="top-pick-badge">Top Pick</span>
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Verdant Apothecary</span>
-            <span class="dot">·</span>
-            <span>Skincare</span>
-          </div>
-          <h3 class="product-card__name">Botanical Radiance Serum</h3>
-          <p class="product-card__desc">A luminous blend of rosehip, jojoba, and sea buckthorn oils that restores skin's natural glow without heaviness.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              9.2/10
-            </span>
-            <span class="product-card__price">$48</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Product 2 -->
-      <a href__="#" class="product-card fade-up delay-2">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png"
-               alt="Herbal Scalp Revival Treatment" />
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Root & Remedy</span>
-            <span class="dot">·</span>
-            <span>Haircare</span>
-          </div>
-          <h3 class="product-card__name">Herbal Scalp Revival Treatment</h3>
-          <p class="product-card__desc">A pre-wash scalp treatment with tea tree, peppermint, and nettle extract to soothe irritation and promote healthy growth.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              8.7/10
-            </span>
-            <span class="product-card__price">$36</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Product 3 -->
-      <a href__="#" class="product-card fade-up delay-3">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png"
-               alt="Wild Shea Body Ceremony Butter" />
-          <span class="top-pick-badge">Top Pick</span>
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Terra Botanica</span>
-            <span class="dot">·</span>
-            <span>Body Care</span>
-          </div>
-          <h3 class="product-card__name">Wild Shea Body Ceremony Butter</h3>
-          <p class="product-card__desc">An ultra-rich body butter blending raw shea, cocoa butter, and marula oil for deep, lasting moisture.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              8.8/10
-            </span>
-            <span class="product-card__price">$52</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Product 4 -->
-      <a href__="#" class="product-card fade-up delay-4">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ff62ab2da_generated_93227520.png"
-               alt="Adaptogen Balance Complex" />
-          <span class="top-pick-badge">Top Pick</span>
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Symbiome</span>
-            <span class="dot">·</span>
-            <span>Supplements</span>
-          </div>
-          <h3 class="product-card__name">Adaptogen Balance Complex</h3>
-          <p class="product-card__desc">A daily adaptogenic supplement combining ashwagandha, reishi, and rhodiola for hormonal balance and calm energy.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              9.0/10
-            </span>
-            <span class="product-card__price">$42</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Product 5 -->
-      <a href__="#" class="product-card fade-up delay-5">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png"
-               alt="Sacred Grove Essential Oil Blend" />
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Aether & Root</span>
-            <span class="dot">·</span>
-            <span>Aromatherapy</span>
-          </div>
-          <h3 class="product-card__name">Sacred Grove Essential Oil Blend</h3>
-          <p class="product-card__desc">A grounding aromatherapy blend of cedarwood, frankincense, and vetiver for meditation and evening ritual.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              9.1/10
-            </span>
-            <span class="product-card__price">$38</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Product 6 -->
-      <a href__="#" class="product-card fade-up delay-1">
-        <div class="product-card__img-wrap">
-          <img src="https://media.base44.com/images/public/6a033565242c3c586af56adb/46bd1bc62_generated_d324163a.png"
-               alt="Midnight Repair Cream" />
-        </div>
-        <div class="product-card__body">
-          <div class="product-card__meta">
-            <span>Luna Herbals</span>
-            <span class="dot">·</span>
-            <span>Skincare</span>
-          </div>
-          <h3 class="product-card__name">Midnight Repair Cream</h3>
-          <p class="product-card__desc">An overnight repair cream with bakuchiol, squalane, and blue tansy to restore and calm skin while you sleep.</p>
-          <div class="product-card__footer">
-            <span class="product-card__rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                fill="currentColor" stroke="currentColor" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              8.9/10
-            </span>
-            <span class="product-card__price">$56</span>
-          </div>
-          <div class="product-card__cta">
-            Read Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
+    <div>
+      <p class="footer-nav-label">Categories</p>
+      <nav class="footer-nav">
+        <a onclick="showPageCategory('skincare')">Skincare</a>
+        <a onclick="showPageCategory('haircare')">Haircare</a>
+        <a onclick="showPageCategory('body_care')">Body Care</a>
+        <a onclick="showPageCategory('supplements')">Supplements</a>
+        <a onclick="showPageCategory('aromatherapy')">Aromatherapy</a>
+        <a onclick="showPageCategory('wellness')">Wellness</a>
+      </nav>
     </div>
   </div>
-</section>
-
-<!-- ══ FOOTER ════════════════════════════════════════════════ -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-          </svg>
-          Luminous Archive
-        </div>
-        <p class="footer-p">Honest reviews of natural beauty and wellness products. Every recommendation is thoroughly tested and transparently reviewed.</p>
-      </div>
-      <div>
-        <h4 class="footer-h4">Categories</h4>
-        <div class="footer-cats">
-          <a href__="#">Skincare</a>
-          <a href__="#">Haircare</a>
-          <a href__="#">Body Care</a>
-          <a href__="#">Supplements</a>
-          <a href__="#">Aromatherapy</a>
-          <a href__="#">Wellness</a>
-        </div>
-      </div>
-      <div>
-        <h4 class="footer-h4">About</h4>
-        <p class="footer-p">We may earn a small commission from affiliate links at no extra cost to you. Our reviews are always independent and unbiased.</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      &copy; <span id="year"></span> Luminous Archive. All rights reserved.
-    </div>
-  </div>
+  <div class="footer-bottom">© <span id="footerYear"></span> The Luminous Archive. All rights reserved.</div>
 </footer>
 
-<!-- ══ FLOATING NAV ══════════════════════════════════════════ -->
-<nav class="floating-nav" id="floatingNav">
-  <div class="floating-nav__inner">
-    <a href__="#" class="floating-nav__logo">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-      </svg>
-    </a>
-    <a href__="#" class="fnav-item active">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2">
-        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-      Home
-    </a>
-    <a href__="#latest" class="fnav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      Reviews
-    </a>
-    <a href__="#categories" class="fnav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="2">
-        <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
-        <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
-      </svg>
-      Categories
-    </a>
-  </div>
-</nav>
-
-<!-- Mobile nav -->
-<nav class="mobile-nav">
-  <a href__="#" class="mnav-item active">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2">
-      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-      <polyline points="9 22 9 12 15 12 15 22"/>
-    </svg>
+<!-- FLOATING NAV -->
+<div class="floating-nav">
+  <button class="nav-link active" id="nav-home" onclick="showPage('home')">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     Home
-  </a>
-  <a href__="#latest" class="mnav-item">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
+  </button>
+  <button class="nav-link" id="nav-reviews" onclick="showPage('reviews')">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
     Reviews
-  </a>
-  <a href__="#categories" class="mnav-item">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2">
-      <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
-      <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
-    </svg>
+  </button>
+  <button class="nav-link" id="nav-categories" onclick="showPage('categories')">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
     Categories
-  </a>
-</nav>
+  </button>
+</div>
 
-<!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
+<!-- ============ COMPOSER MODAL ============ -->
+<div class="composer-backdrop" id="composerBackdrop" onclick="handleBackdropClick(event)">
+  <div class="composer">
+    <div class="composer-header">
+      <div class="composer-header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+        <span class="composer-header-title">New Review</span>
+      </div>
+      <button class="composer-close" onclick="closeComposer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="composer-body">
+      <!-- Image upload -->
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-zone-placeholder" id="uploadPlaceholder">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Click to upload a photo</span>
+        </div>
+        <div class="upload-zone-preview" id="uploadPreview" style="display:none;">
+          <img id="previewImg" src="" alt="preview" />
+          <button class="upload-remove" type="button" onclick="removeImage(event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" onchange="handleImageFile(event)" />
+
+      <!-- Image URL fallback -->
+      <div id="imageUrlRow" class="input-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <input type="url" id="imageUrlInput" placeholder="Or paste an image URL..." />
+      </div>
+
+      <!-- Name & Brand -->
+      <div class="form-row">
+        <input type="text" id="formName" placeholder="Product name *" required />
+        <input type="text" id="formBrand" placeholder="Brand *" required />
+      </div>
+
+      <!-- Category -->
+      <div class="cat-pills" id="catPills"></div>
+
+      <!-- Short desc -->
+      <textarea id="formShortDesc" rows="2" placeholder="Write a short tagline (shown on cards)..."></textarea>
+
+      <!-- Full review -->
+      <textarea id="formFullReview" rows="5" placeholder="Write your full review here... (supports markdown)"></textarea>
+
+      <!-- Ratings -->
+      <div class="form-row-3">
+        <div class="input-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <input type="number" id="formOverall" min="0" max="10" step="0.1" placeholder="Overall /10" />
+        </div>
+        <div class="input-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <input type="number" id="formPurity" min="0" max="10" step="0.1" placeholder="Purity /10" />
+        </div>
+        <div class="input-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <input type="number" id="formValue" min="0" max="10" step="0.1" placeholder="Value /10" />
+        </div>
+      </div>
+
+      <!-- Price & Affiliate -->
+      <div class="form-row">
+        <input type="text" id="formPrice" placeholder="Price (e.g. $48)" />
+        <div class="input-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <input type="url" id="formAffiliate" placeholder="Affiliate / buy link" />
+        </div>
+      </div>
+
+      <!-- Advanced toggle -->
+      <button class="advanced-toggle" onclick="toggleAdvanced()">
+        <svg id="advChevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span id="advToggleLabel">Show advanced fields (pros, cons, ingredients…)</span>
+      </button>
+
+      <!-- Advanced fields -->
+      <div class="advanced-section" id="advancedSection">
+        <!-- Pros -->
+        <div>
+          <p class="field-label">What We Love (Pros)</p>
+          <div class="tag-list" id="prosList"></div>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" id="proInput" placeholder="Add a pro..." onkeydown="if(event.key==='Enter'){event.preventDefault();addPro()}" />
+            <button class="btn btn-outline-dark btn-sm" onclick="addPro()">Add</button>
+          </div>
+        </div>
+
+        <!-- Cons -->
+        <div>
+          <p class="field-label">Worth Noting (Cons)</p>
+          <div class="tag-list" id="consList"></div>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" id="conInput" placeholder="Add a con..." onkeydown="if(event.key==='Enter'){event.preventDefault();addCon()}" />
+            <button class="btn btn-outline-dark btn-sm" onclick="addCon()">Add</button>
+          </div>
+        </div>
+
+        <!-- Ingredients -->
+        <div>
+          <p class="field-label">Key Ingredients</p>
+          <div class="tag-list" id="ingList"></div>
+          <div class="form-row" style="margin-bottom:0.4rem;">
+            <input type="text" id="ingName" placeholder="Ingredient name" />
+            <input type="text" id="ingBenefit" placeholder="Benefit (optional)" />
+          </div>
+          <button style="font-size:0.75rem;color:var(--primary);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:0.25rem;" onclick="addIngredient()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add ingredient
+          </button>
+        </div>
+
+        <!-- Skin Types -->
+        <div>
+          <p class="field-label">Skin Types</p>
+          <div class="tag-list" id="skinList"></div>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" id="skinInput" placeholder="e.g. Dry, Oily..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkinType()}" />
+            <button class="btn btn-outline-dark btn-sm" onclick="addSkinType()">Add</button>
+          </div>
+        </div>
+
+        <!-- Flags -->
+        <div class="checkbox-row">
+          <label class="checkbox-label" onclick="toggleFlag('is_featured')">
+            <div class="custom-checkbox" id="cb-is_featured">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            Featured
+          </label>
+          <label class="checkbox-label" onclick="toggleFlag('is_top_pick')">
+            <div class="custom-checkbox" id="cb-is_top_pick">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            Top Pick
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer-footer">
+      <button class="btn btn-outline-dark" onclick="closeComposer()">Cancel</button>
+      <button class="btn btn-primary" id="publishBtn" onclick="publishReview()">Publish Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-  // Footer year
-  document.getElementById('year').textContent = new Date().getFullYear();
+// ============ DATA STORE ============
+let products = [];
+let activeCategory = 'all';
+let imageFileData = null; // base64 or null
+let formFlags = { is_featured: false, is_top_pick: false };
+let formPros = [], formCons = [], formIngredients = [], formSkinTypes = [];
+let selectedCategory = 'skincare';
+let advancedOpen = false;
 
-  // Floating nav scroll appearance
-  const floatingNav = document.getElementById('floatingNav');
-  window.addEventListener('scroll', () => {
-    floatingNav.style.opacity = window.scrollY > 80 ? '1' : '0';
-    floatingNav.style.transform = window.scrollY > 80
-      ? 'translateX(-50%) translateY(0)'
-      : 'translateX(-50%) translateY(16px)';
-  });
-  floatingNav.style.opacity = '0';
-  floatingNav.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-  floatingNav.style.transform = 'translateX(-50%) translateY(16px)';
+const CATEGORIES = ['skincare','haircare','body_care','supplements','aromatherapy','wellness'];
+const CAT_LABELS = {
+  skincare:'Skincare', haircare:'Haircare', body_care:'Body Care',
+  supplements:'Supplements', aromatherapy:'Aromatherapy', wellness:'Wellness'
+};
+const CAT_IMAGES = {
+  skincare:'https://media.base44.com/images/public/6a033565242c3c586af56adb/46bd1bc62_generated_d324163a.png',
+  haircare:'https://media.base44.com/images/public/6a033565242c3c586af56adb/10b7c70a2_generated_27b94e7a.png',
+  body_care:'https://media.base44.com/images/public/6a033565242c3c586af56adb/f2d863465_generated_aa41b9d4.png',
+  supplements:'https://media.base44.com/images/public/6a033565242c3c586af56adb/ff62ab2da_generated_93227520.png',
+  aromatherapy:'https://media.base44.com/images/public/6a033565242c3c586af56adb/ade61e401_generated_69e382da.png',
+  wellness:'https://media.base44.com/images/public/6a033565242c3c586af56adb/7ba2ac4b9_generated_dd30b56a.png',
+};
 
-  // Featured scroll buttons
-  function scrollTrack(dir) {
-    const track = document.getElementById('featuredTrack');
-    track.scrollBy({ left: dir * track.offsetWidth * 0.6, behavior: 'smooth' });
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+  loadFromStorage();
+  buildCatPills();
+  buildFilterPills();
+  renderAll();
+});
+
+// ============ STORAGE ============
+function loadFromStorage() {
+  const saved = localStorage.getItem('luminous_products');
+  if (saved) products = JSON.parse(saved);
+}
+function saveToStorage() {
+  localStorage.setItem('luminous_products', JSON.stringify(products));
+}
+
+// ============ PAGE NAV ============
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-' + name)?.classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'reviews') renderReviews();
+  if (name === 'categories') renderCatPage();
+}
+
+function showPageCategory(cat) {
+  activeCategory = cat;
+  showPage('reviews');
+  buildFilterPills();
+  renderReviews();
+}
+
+// ============ RENDER ============
+function renderAll() {
+  renderFeatured();
+  renderLatest();
+  renderCatGrid('homeCatGrid');
+  const homeEmpty = document.getElementById('home-empty');
+  const latestSection = document.getElementById('latest-section');
+  const featuredSection = document.getElementById('featured-section');
+  if (products.length === 0) {
+    homeEmpty.style.display = 'block';
+    latestSection.style.display = 'none';
+    featuredSection.style.display = 'none';
+  } else {
+    homeEmpty.style.display = 'none';
+    latestSection.style.display = 'block';
+    featuredSection.style.display = products.filter(p=>p.is_featured).length>0 ? 'block' : 'none';
   }
+}
 
-  // Hero fade-in
-  setTimeout(() => {
-    document.getElementById('hero-block').classList.add('visible');
-  }, 200);
+function renderFeatured() {
+  const el = document.getElementById('featuredScroll');
+  const featured = products.filter(p => p.is_featured);
+  el.innerHTML = featured.map(p => `
+    <div class="featured-item" onclick="showPage('reviews')">
+      ${p.image_url ? `<img src="${escHtml(p.image_url)}" alt="${escHtml(p.name)}" loading="lazy" />` : `<div style="width:100%;height:100%;background:var(--muted);"></div>`}
+      <div class="featured-item-overlay">
+        <div class="featured-item-brand">${escHtml(p.brand)}</div>
+        <div class="featured-item-name">${escHtml(p.name)}</div>
+        ${p.overall_rating ? `<div class="featured-item-rating">
+          <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          ${p.overall_rating}/10
+        </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
 
-  // Intersection Observer for fade-up elements
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
+function renderLatest() {
+  const el = document.getElementById('homeLatestGrid');
+  const latest = products.slice(0, 6);
+  el.innerHTML = latest.map((p,i) => productCardHtml(p, i)).join('');
+}
 
-  document.querySelectorAll('.fade-up:not(#hero-block)').forEach(el => observer.observe(el));
+function renderCatGrid(containerId) {
+  const el = document.getElementById(containerId);
+  const counts = {};
+  products.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+  el.innerHTML = CATEGORIES.map((slug,i) => `
+    <div class="cat-card" onclick="showPageCategory('${slug}')">
+      <img src="${CAT_IMAGES[slug]}" alt="${CAT_LABELS[slug]}" loading="lazy" />
+      <div class="cat-card-overlay">
+        <div class="cat-card-label">${CAT_LABELS[slug]}</div>
+        <div class="cat-card-count">${counts[slug] || 0} review${counts[slug] !== 1 ? 's' : ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCatPage() {
+  renderCatGrid('catPageGrid');
+}
+
+function renderReviews() {
+  const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  let filtered = products.filter(p => {
+    const matchCat = activeCategory === 'all' || p.category === activeCategory;
+    const matchSearch = !search || p.name?.toLowerCase().includes(search) || p.brand?.toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+  const grid = document.getElementById('reviewsGrid');
+  const empty = document.getElementById('reviews-empty');
+  const count = document.getElementById('reviewCount');
+  count.textContent = `${filtered.length} ${filtered.length === 1 ? 'review' : 'reviews'}`;
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    grid.innerHTML = filtered.map((p,i) => productCardHtml(p, i)).join('');
+    empty.style.display = 'none';
+  }
+}
+
+function productCardHtml(p, i) {
+  return `
+    <div class="product-card">
+      <div class="product-card-img">
+        ${p.image_url
+          ? `<img src="${escHtml(p.image_url)}" alt="${escHtml(p.name)}" loading="lazy" />`
+          : `<div class="product-card-img-empty">No image</div>`}
+        ${p.is_top_pick ? `<span class="top-pick-badge">Top Pick</span>` : ''}
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-meta">
+          <span>${escHtml(p.brand)}</span>
+          <span class="product-card-meta-dot">·</span>
+          <span>${CAT_LABELS[p.category] || p.category}</span>
+        </div>
+        <div class="product-card-title">${escHtml(p.name)}</div>
+        ${p.short_description ? `<div class="product-card-desc">${escHtml(p.short_description)}</div>` : ''}
+        <div class="product-card-footer">
+          <div class="product-card-rating">
+            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            ${p.overall_rating ? p.overall_rating + '/10' : '—'}
+          </div>
+          ${p.price ? `<span class="product-card-price">${escHtml(p.price)}</span>` : ''}
+        </div>
+        <div class="product-card-cta">
+          Read Review
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ FILTERS ============
+function buildFilterPills() {
+  const el = document.getElementById('filterPills');
+  const cats = [{ slug:'all', label:'All' }, ...CATEGORIES.map(s => ({slug:s, label:CAT_LABELS[s]}))];
+  el.innerHTML = cats.map(c => `
+    <button class="filter-pill ${c.slug === activeCategory ? 'active' : ''}" onclick="setCategory('${c.slug}')">
+      ${c.label}
+    </button>
+  `).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  buildFilterPills();
+  renderReviews();
+}
+
+function filterReviews() {
+  renderReviews();
+}
+
+// ============ FEATURED SCROLL ============
+function scrollFeatured(dir) {
+  const el = document.getElementById('featuredScroll');
+  el.scrollBy({ left: dir * 340, behavior: 'smooth' });
+}
+
+// ============ COMPOSER ============
+function buildCatPills() {
+  const el = document.getElementById('catPills');
+  el.innerHTML = CATEGORIES.map(cat => `
+    <button type="button" class="cat-pill ${cat === selectedCategory ? 'active' : ''}" onclick="selectCat('${cat}')">
+      ${CAT_LABELS[cat]}
+    </button>
+  `).join('');
+}
+
+function selectCat(cat) {
+  selectedCategory = cat;
+  buildCatPills();
+}
+
+function openComposer() {
+  document.getElementById('composerBackdrop').classList.add('open');
+  resetComposer();
+}
+
+function closeComposer() {
+  document.getElementById('composerBackdrop').classList.remove('open');
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('composerBackdrop')) closeComposer();
+}
+
+function resetComposer() {
+  document.getElementById('formName').value = '';
+  document.getElementById('formBrand').value = '';
+  document.getElementById('formShortDesc').value = '';
+  document.getElementById('formFullReview').value = '';
+  document.getElementById('formOverall').value = '';
+  document.getElementById('formPurity').value = '';
+  document.getElementById('formValue').value = '';
+  document.getElementById('formPrice').value = '';
+  document.getElementById('formAffiliate').value = '';
+  document.getElementById('imageUrlInput').value = '';
+  document.getElementById('proInput').value = '';
+  document.getElementById('conInput').value = '';
+  document.getElementById('ingName').value = '';
+  document.getElementById('ingBenefit').value = '';
+  document.getElementById('skinInput').value = '';
+  imageFileData = null;
+  formFlags = { is_featured: false, is_top_pick: false };
+  formPros = []; formCons = []; formIngredients = []; formSkinTypes = [];
+  selectedCategory = 'skincare';
+  advancedOpen = false;
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadPlaceholder').style.display = 'flex';
+  document.getElementById('imageUrlRow').style.display = 'block';
+  document.getElementById('advancedSection').classList.remove('open');
+  document.getElementById('advToggleLabel').textContent = 'Show advanced fields (pros, cons, ingredients…)';
+  document.getElementById('advChevron').style.transform = '';
+  document.getElementById('cb-is_featured').classList.remove('checked');
+  document.getElementById('cb-is_top_pick').classList.remove('checked');
+  renderTagList('prosList', formPros, 'Pro');
+  renderTagList('consList', formCons, 'Con');
+  renderTagList('ingList', formIngredients.map(i=>i.name), 'Ing');
+  renderTagList('skinList', formSkinTypes, 'Skin');
+  buildCatPills();
+}
+
+function handleImageFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    imageFileData = ev.target.result;
+    document.getElementById('previewImg').src = imageFileData;
+    document.getElementById('uploadPreview').style.display = 'block';
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+    document.getElementById('imageUrlRow').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage(e) {
+  e.stopPropagation();
+  imageFileData = null;
+  document.getElementById('previewImg').src = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadPlaceholder').style.display = 'flex';
+  document.getElementById('imageUrlRow').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+}
+
+function toggleAdvanced() {
+  advancedOpen = !advancedOpen;
+  document.getElementById('advancedSection').classList.toggle('open', advancedOpen);
+  document.getElementById('advToggleLabel').textContent = advancedOpen ? 'Hide advanced fields (pros, cons, ingredients…)' : 'Show advanced fields (pros, cons, ingredients…)';
+  document.getElementById('advChevron').style.transform = advancedOpen ? 'rotate(180deg)' : '';
+}
+
+function toggleFlag(key) {
+  formFlags[key] = !formFlags[key];
+  document.getElementById('cb-' + key).classList.toggle('checked', formFlags[key]);
+}
+
+function renderTagList(containerId, items, type) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map((item, i) => `
+    <span class="tag-badge">
+      ${escHtml(item)}
+      <button class="tag-badge-remove" onclick="removeTag('${type}', ${i})">
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </span>
+  `).join('');
+}
+
+function removeTag(type, i) {
+  if (type === 'Pro') { formPros.splice(i,1); renderTagList('prosList', formPros, 'Pro'); }
+  if (type === 'Con') { formCons.splice(i,1); renderTagList('consList', formCons, 'Con'); }
+  if (type === 'Ing') { formIngredients.splice(i,1); renderTagList('ingList', formIngredients.map(x=>x.name), 'Ing'); }
+  if (type === 'Skin') { formSkinTypes.splice(i,1); renderTagList('skinList', formSkinTypes, 'Skin'); }
+}
+
+function addPro() {
+  const v = document.getElementById('proInput').value.trim();
+  if (v) { formPros.push(v); document.getElementById('proInput').value = ''; renderTagList('prosList', formPros, 'Pro'); }
+}
+function addCon() {
+  const v = document.getElementById('conInput').value.trim();
+  if (v) { formCons.push(v); document.getElementById('conInput').value = ''; renderTagList('consList', formCons, 'Con'); }
+}
+function addIngredient() {
+  const name = document.getElementById('ingName').value.trim();
+  const benefit = document.getElementById('ingBenefit').value.trim();
+  if (name) {
+    formIngredients.push({ name, benefit });
+    document.getElementById('ingName').value = '';
+    document.getElementById('ingBenefit').value = '';
+    renderTagList('ingList', formIngredients.map(x=>x.name), 'Ing');
+  }
+}
+function addSkinType() {
+  const v = document.getElementById('skinInput').value.trim();
+  if (v) { formSkinTypes.push(v); document.getElementById('skinInput').value = ''; renderTagList('skinList', formSkinTypes, 'Skin'); }
+}
+
+function publishReview() {
+  const name = document.getElementById('formName').value.trim();
+  const brand = document.getElementById('formBrand').value.trim();
+  if (!name || !brand) { showToast('Please enter a product name and brand.'); return; }
+
+  const imageUrl = imageFileData || document.getElementById('imageUrlInput').value.trim() || '';
+
+  const product = {
+    id: 'local_' + Date.now(),
+    name,
+    brand,
+    category: selectedCategory,
+    short_description: document.getElementById('formShortDesc').value.trim(),
+    full_review: document.getElementById('formFullReview').value.trim(),
+    overall_rating: parseFloat(document.getElementById('formOverall').value) || null,
+    purity_rating: parseFloat(document.getElementById('formPurity').value) || null,
+    value_score: parseFloat(document.getElementById('formValue').value) || null,
+    price: document.getElementById('formPrice').value.trim(),
+    affiliate_url: document.getElementById('formAffiliate').value.trim(),
+    image_url: imageUrl,
+    is_featured: formFlags.is_featured,
+    is_top_pick: formFlags.is_top_pick,
+    pros: [...formPros],
+    cons: [...formCons],
+    key_ingredients: [...formIngredients],
+    skin_type: [...formSkinTypes],
+    created_date: new Date().toISOString(),
+  };
+
+  products.unshift(product);
+  saveToStorage();
+  closeComposer();
+  renderAll();
+  if (document.getElementById('page-reviews').classList.contains('active')) renderReviews();
+  showToast('Review published!');
+}
+
+// ============ TOAST ============
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ============ UTILS ============
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
-
 </body>
 </html>
